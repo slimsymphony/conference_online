@@ -12,7 +12,23 @@
         <servlet-name>cometd</servlet-name>
         <url-pattern>/cometd/*</url-pattern>
     </servlet-mapping>
+	
+	<servlet>
+        <servlet-name>dispatch</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/applicationContext.xml</param-value>
+		</init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
+    <servlet-mapping>
+        <servlet-name>dispatch</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+	
+	
     <filter>
         <filter-name>cross-origin</filter-name>
         <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>

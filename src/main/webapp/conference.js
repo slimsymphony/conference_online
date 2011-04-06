@@ -48,6 +48,14 @@ var topic = {
         });
 
         dojo.query("#leaveButton").onclick(topic, "leave");
+        
+        dojo.query("#attachButton").onclick(function(e){
+        	alert("here");
+        	 var text = dojo.byId('phrase').value;
+             text = "$img" + text;
+             dojo.byId('phrase').value = text;
+             topic.chat();
+        });
 
         /**暂时禁用自动cookie记录找回 便于调试
         // Check if there was a saved application state
@@ -184,13 +192,12 @@ var topic = {
         {
             chat.innerHTML += "<span class=\"membership\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">" + text + "</span></span><br/>";
             topic._lastUser = null;
-        }
-        else if (message.data.scope == "private")
-        {
+        }else if (message.data.scope == "private"){
             chat.innerHTML += "<span class=\"private\"><span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">[private]&nbsp;" + text + "</span></span><br/>";
-        }
-        else
-        {
+        }else if(text.indexOf("$img")>=0){
+        	text = text.substr(4);
+        	chat.innerHTML += "<span class=\"from\">" + fromUser + "&nbsp;</span><p><img src='" + text + "'/></p><br/>";
+        }else{
             chat.innerHTML += "<span class=\"from\">" + fromUser + "&nbsp;</span><span class=\"text\">" + text + "</span><br/>";
         }
 
@@ -216,7 +223,7 @@ var topic = {
             dojox.cometd.publish('/conference/'+topicName, {
                 user: "系统信息",
                 membership: 'join',
-                chat: "['" + topic._username + "' 加入讨论"
+                chat: "['" + topic._username + "']加入讨论"
             });
         });
     },

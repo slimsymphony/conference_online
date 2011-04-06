@@ -6,8 +6,11 @@
 	response.setDateHeader("Expires", 0);
 	request.setCharacterEncoding("UTF-8");
 	String topic = "demo";
-	if( request.getParameter("topic") != null )
-		topic = new String(request.getParameter("topic").getBytes("ISO-8859-1"),"UTF-8"); 
+	//out.println(request.getParameter("topic"));
+	//if( request.getParameter("topic") != null )
+	//	topic = new String(request.getParameter("topic").getBytes("ISO-8859-1"),"UTF-8");
+	//out.println(topic);
+	topic = request.getParameter("topic");
 %>
 <html>
 
@@ -29,7 +32,7 @@
 
 <body>
 
-<h1>专题事件讨论</h1>
+<h1>专题事件讨论: <%=topic%></h1>
 
 <div id="topicroom">
     <div id="chat"></div>
@@ -69,6 +72,7 @@
             <input id="phrase" type="text" />
             <button id="sendButton" class="button">发送</button>
             <button id="leaveButton" class="button">离开</button>
+            <button id="attachButton" class="button">附件</button>
         </div>
     </div>
 </div>

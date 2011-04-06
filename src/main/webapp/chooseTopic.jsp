@@ -4,6 +4,7 @@
 <%@ page import="frank.incubator.onlineConference.*" %>
 <%@ page import="frank.incubator.onlineConference.model.*" %>
 <%@ page import="frank.incubator.onlineConference.persist.*" %>
+
 <%
 	response.setHeader("Cache-Control", "no-store");
 	response.setHeader("Pragma", "no-cache");
@@ -11,8 +12,8 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 <%
-	TopicManager tm = Context.getBean("TopicManager",TopicManager.class);
-	List<Topic> lists = tm.getHistoryTopics();
+	//TopicManager tm = Context.getBean("TopicManager",TopicManager.class);
+	List<Topic> lists = (List<Topic>)request.getAttribute("topics");//tm.getHistoryTopics();
 %>
 <html>
  <head>
@@ -22,62 +23,82 @@
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="0" />    
   <script type="text/javascript" src="${pageContext.request.contextPath}/dojo/dojo.js"></script>
+  <style type="text/css">
+	  button{font-size:8pt;font-family:"微软雅黑"}
+	  DIV{font-size:12pt;font-family:"微软雅黑"}
+	  th{font-size:11pt;font-family:"微软雅黑"}
+	</style>
   <script type="text/javascript">
-  	   dojo.require("dijit.Dialog");
-  	   dojo.require("dijit.form.TextBox");
-  	   dojo.require("dijit.form.Button");
        var config = {
             contextPath: '${pageContext.request.contextPath}'
         };
        
-       function init(){
-    	   
-       }
        
        function join( topic ){
     	   window.location.href="conference.jsp?topic="+encodeURI(topic);
        }
        
-       function newTopic(){
-    	   dijit.byId('dialog1').show();
+       function showDiv(){
+    	   dojo.byId('dialog1').style.display = "block";
+       }
+	   function hidDiv(){
+    	   dojo.byId('dialog1').style.display = "none";
+       }
+       function confirmTopic(){
+	   		var topic = dojo.byId("newTopicName").value;
+			if(topic==''){
+				alert("不能为空!");
+				return;
+			}	
+			join(topic);
+	   }
+	   
+       function init(){
+		   var newTopicBtn = dojo.byId("newTopicBtn");
+		   dojo.connect(newTopicBtn,"onclick",showDiv);
+		   var confirmBtn = dojo.byId("confirmBtn");
+		   dojo.connect(confirmBtn,"onclick",confirmTopic);
+		   var cancelBtn = dojo.byId("cancelBtn");
+		   dojo.connect(cancelBtn,"onclick",hidDiv);
        }
        
        dojo.addOnLoad(init);
-       var nBtn = dojo.byId("newBtn");
-       dojo.connect(nBtn,newTopic);
+       
   </script>
  </head>
 
  <body>
- 	<div dojoType="dijit.Dialog" id="dialog1" title="First Dialog"
-    	execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-    	<table>
-		    <tr>
-		      <td><label for="name">请填写新事件讨论名称: </label></td>
-		      <td><input dojoType="dijit.form.TextBox" type="text" name="name" id="name"></td>
-		    </tr>
-		    <tr>
-		      <td colspan="2" align="center">
-		        <button dojoType="dijit.form.Button" type="submit">OK</button></td>
-		    </tr>
-		</table>
-    </div>
-	<table width="70%" align="center">
+ 	<h2 align="center">选择讨论事件</h2><br/>
+	<table width="70%" align="center" border="1">
 		<tr>
-			<td nowrap="true">讨论事件</td>
-			<td nowrap="true">发起时间</td>
-			<td nowrap="true">操作</td>
+			<th nowrap="true">讨论事件</th>
+			<th nowrap="true">发起时间</th>
+			<th nowrap="true">操作</th>
 		</tr>
 		<% for(Topic topic : lists ){ %>
 		<tr>
 			<td><%=topic.getTopicName()%></td>
 			<td><%=topic.getBeginTime()%></td>
 			<td>
-				<input id="btnJoin" onClick="join(<%=topic.getTopicName()%>)" value="加入"/>
+				<input type="button" onClick="join('<%=topic.getTopicName()%>')" value="加入"/>
 			</td>
 		</tr>
 		<% } %>
-		<tr><td colspan="3" align="center"><input id="newBtn" value="新建事件讨论"/></td></tr>
-	</table>  
+		<tr><td colspan="3" align="center"><button id="newTopicBtn">新建事件讨论</button></td></tr>
+	</table> 
+	<div id="dialog1" style="display:none;z-index:10;position:absolute;left:250pt;top:120pt;background-color:green;width:400px;height:100px">
+    	<table>
+		    <tr>
+		      <td><label for="newTopicName">请填写新事件讨论名称: </label></td>
+		      <td><input type="text" id="newTopicName" /></td>
+		    </tr>
+		    <tr>
+		      <td colspan="2" align="center">
+		        <button id="confirmBtn">OK</button>&nbsp;&nbsp;&nbsp;
+				<button id="cancelBtn">关闭</button>
+			  </td>
+		    </tr>
+		</table>
+    </div> 
  </body>
 </html>
