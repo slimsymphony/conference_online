@@ -62,7 +62,7 @@ public class TopicManagerImpl implements TopicManager {
 
 	public List<TopicRecord> getTopicRecords(final String topicName) {
 		final List<TopicRecord> list = new ArrayList<TopicRecord>();
-		jt.query("select * from TOPIC_RECORDS where topic_name=?",
+		jt.query("select * from TOPIC_RECORDS where topic_name=? ORDER BY TIME DESC LIMIT 30",
 				new Object[] { topicName }, new RowCallbackHandler() {
 					public void processRow(ResultSet rs) throws SQLException {
 						TopicRecord tr = new TopicRecord();
