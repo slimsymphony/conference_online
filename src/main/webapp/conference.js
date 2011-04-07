@@ -56,6 +56,8 @@ var topic = {
              dojo.byId('phrase').value = text;
              topic.chat();
         });
+        
+        dojo.query("#clearButton").onclick(topic,"clear");
 
         /**暂时禁用自动cookie记录找回 便于调试
         // Check if there was a saved application state
@@ -86,7 +88,7 @@ var topic = {
 
         //dojox.cometd.ackEnabled = dojo.query("#ackEnabled").attr("checked");
         //这里配置websocket的方式
-        //dojox.cometd.websocketEnabled = true;
+        dojox.cometd.websocketEnabled = true;
         var cometdURL = location.protocol + "//" + location.host + config.contextPath + "/cometd";
         dojox.cometd.init({
             url: cometdURL,
@@ -145,7 +147,12 @@ var topic = {
         topic._lastUser = null;
         topic._disconnecting = true;
     },
-
+    
+    clear: function()
+    {
+    	dojo.byId('chat').innerHTML = '';
+    },
+    
     chat: function()
     {
         var text = dojo.byId('phrase').value;
@@ -308,9 +315,10 @@ dojo.addOnUnload(function()
     if (topic._username)
     {
         dojox.cometd.reload();
-        org.cometd.COOKIE.set('org.cometd.'+topicName+'.state', org.cometd.JSON.toJSON({
+        //暂时禁用cookie
+        /*org.cometd.COOKIE.set('org.cometd.'+topicName+'.state', org.cometd.JSON.toJSON({
             username: topic._username
-        }), { 'max-age': 5 });
+        }), { 'max-age': 5 });*/
     }
     else
         dojox.cometd.disconnect();

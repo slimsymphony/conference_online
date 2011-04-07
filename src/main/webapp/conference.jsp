@@ -72,7 +72,8 @@
             <input id="phrase" type="text" />
             <button id="sendButton" class="button">发送</button>
             <button id="leaveButton" class="button">离开</button>
-            <button id="attachButton" class="button">附件</button>
+            <button id="attachButton" class="button">图片</button>
+			<button id="clearButton" class="button">清空讨论区</button>
         </div>
     </div>
 </div>

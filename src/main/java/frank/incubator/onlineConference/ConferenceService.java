@@ -40,10 +40,8 @@ import frank.incubator.onlineConference.persist.TopicManager;
  * @author frank
  * 
  */
-@Named
-// Tells Spring that this is a bean
+@Named // Tells Spring that this is a bean
 @Singleton
-// Tells Spring that this is a singleton
 @Service("conferenceService")
 public class ConferenceService {
 
@@ -186,7 +184,10 @@ public class ConferenceService {
 		for(TopicRecord tr : list) {
 			forward = bayeux.newMessage();
 			Map<String, Object> chat = new HashMap<String, Object>();
-			chat.put("chat", sdf.format(tr.getTime())+ tr.getContent());
+			String content = tr.getContent();
+			if(content.startsWith("$img"))
+				content = "<img src='"+content.substring(4)+"' />";
+			chat.put("chat", sdf.format(tr.getTime())+ content);
 			chat.put("user", ">>>"+tr.getUser());
 			forward.setChannel("/conference/" + topic);
 			forward.setId(client.getId());
