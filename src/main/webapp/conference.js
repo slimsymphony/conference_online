@@ -31,6 +31,10 @@ var topic = {
         {
             topic.join(dojo.byId('username').value);
         });
+        
+        dojo.query("#backButton").onclick(function(e){
+        	window.location.href="index.do";
+        });
 
         dojo.query("#phrase").attr({
             "autocomplete": "off"
@@ -50,8 +54,8 @@ var topic = {
         dojo.query("#leaveButton").onclick(topic, "leave");
         
         dojo.query("#attachButton").onclick(function(e){
-        	alert("here");
         	 var text = dojo.byId('phrase').value;
+        	 if (!text || !text.length) return;
              text = "$img" + text;
              dojo.byId('phrase').value = text;
              topic.chat();

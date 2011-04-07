@@ -61,6 +61,7 @@
                     </td>
                     <td>
                         <button id="joinButton" class="button">加入讨论</button>
+						<button id="backButton" class="button">重新选择讨论区</button>
                     </td>
                 </tr>
                 </tbody>
